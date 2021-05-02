@@ -13,4 +13,10 @@ public class Messenger {
     public static void sendMessage(Player player, String message, MessageSeverity severity) {
         player.sendMessage(severity.getPrefix() + message);
     }
+
+    public static void sendTitle(String title, String subtitle) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendTitle(title, subtitle, 10, 70, 20);
+        }
+    }
 }

@@ -1,14 +1,12 @@
 package io.github.metalturtle18.scanblockhunt.util;
 
+import org.bukkit.scoreboard.Team;
+
 public class GamePlayer {
 
-    private int score;
+    private Team boardTeam;
 
-    public GamePlayer() {
-        score = 0;
-    }
-
-    public void increaseScore() {
-        score++;
+    public GamePlayer(Team team) {
+        boardTeam = team;
     }
 }

@@ -25,7 +25,7 @@ public class NextItemCommand implements BlockHuntCommand {
                 Messenger.sendMessage(player, "That is not a valid item!", MessageSeverity.INCORRECT_COMMAND_USAGE);
                 return;
             }
-
+            ScanBlockHunt.runningGame.setItem(item);
         }
     }
 }
