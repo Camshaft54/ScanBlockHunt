@@ -3,6 +3,7 @@ package io.github.metalturtle18.scanblockhunt;
 import io.github.metalturtle18.scanblockhunt.commands.CommandManager;
 import io.github.metalturtle18.scanblockhunt.events.ItemPickupEvent;
 import io.github.metalturtle18.scanblockhunt.events.MoveItemEvent;
+import io.github.metalturtle18.scanblockhunt.events.RoundElapsedRunnable;
 import io.github.metalturtle18.scanblockhunt.util.Game;
 import io.github.metalturtle18.scanblockhunt.util.Messenger;
 import io.github.metalturtle18.scanblockhunt.util.enums.MessageSeverity;
@@ -22,6 +23,7 @@ public class ScanBlockHunt extends JavaPlugin {
         PluginManager pluginManager = getServer().getPluginManager();
         Objects.requireNonNull(getCommand("blockhunt")).setExecutor(new CommandManager());
         Objects.requireNonNull(getCommand("blockhunt")).setTabCompleter(new CommandManager());
+        getServer().getScheduler().runTaskTimer(this, new RoundElapsedRunnable(), 20L, 20L);
         pluginManager.registerEvents(new ItemPickupEvent(), this);
         pluginManager.registerEvents(new MoveItemEvent(), this);
         Messenger.sendMessage("Plugin loaded successfully!", MessageSeverity.INFO);
