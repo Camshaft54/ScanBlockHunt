@@ -25,6 +25,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         commands.add(new JoinGameCommand());
         commands.add(new GameInfoCommand());
         commands.add(new NextItemCommand());
+        commands.add(new EndGameCommand());
+        commands.add(new EndRoundCommand());
+        commands.add(new AddPlayerCommand());
+        commands.add(new RemovePlayerCommand());
     }
 
     @Override

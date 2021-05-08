@@ -135,12 +135,13 @@ public class Game {
      * Ends the entire game and removes all the players from it.
      */
     public void endGame() {
-        ScanBlockHunt.roundGoing = false;
         if (Bukkit.getScoreboardManager() != null) {
             for (Player p : players.keySet()) {
                 removePlayer(p);
             }
         }
+        ScanBlockHunt.roundGoing = false;
+        ScanBlockHunt.runningGame = null;
     }
 
     /**
