@@ -70,11 +70,10 @@ public class Game {
         Team playerTeam = scoreboard.getTeam(player.getDisplayName());
         if (playerTeam != null && Bukkit.getScoreboardManager() != null) {
             playerTeam.unregister();
-            Scoreboard dummyScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-            Objective dummyObj = dummyScoreboard.registerNewObjective("dummy", "", "");
-            dummyObj.setDisplaySlot(DisplaySlot.SIDEBAR);
-            player.setScoreboard(dummyScoreboard);
             players.remove(player);
+            Scoreboard dummy = Bukkit.getScoreboardManager().getNewScoreboard();
+            dummy.registerNewObjective("dummy", "dummy", "dummy").setDisplaySlot(DisplaySlot.SIDEBAR);
+            player.setScoreboard(dummy);
         }
     }
 
@@ -135,9 +134,12 @@ public class Game {
      * Ends the entire game and removes all the players from it.
      */
     public void endGame() {
-        if (Bukkit.getScoreboardManager() != null) {
-            for (Player p : players.keySet()) {
-                removePlayer(p);
+        itemObj.unregister();
+        for (Player p : players.keySet()) {
+            Team playerTeam = scoreboard.getTeam(p.getDisplayName());
+            if (playerTeam != null) {
+                playerTeam.unregister();
+                players.remove(p);
             }
         }
         ScanBlockHunt.roundGoing = false;

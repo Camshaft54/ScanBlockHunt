@@ -7,6 +7,7 @@ import io.github.metalturtle18.scanblockhunt.util.enums.MessageSeverity;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.Set;
 
 public class GameInfoCommand implements BlockHuntCommand {
 
@@ -22,8 +23,15 @@ public class GameInfoCommand implements BlockHuntCommand {
             return;
         }
         // TODO more checks and stuff
-        Messenger.sendMessage(player, "Game currently running!\nHosted by " + ScanBlockHunt.runningGame.getGameHost(), MessageSeverity.INFO);
-        String playerString = Arrays.toString(ScanBlockHunt.runningGame.getPlayers().keySet().toArray()).replaceAll("(\\[|\\])", "");
-        Messenger.sendMessage(player, ScanBlockHunt.runningGame.getPlayers().size() + "Players: " + playerString, MessageSeverity.INFO);
+        Set<Player> players = ScanBlockHunt.runningGame.getPlayers().keySet();
+        String playerString = Arrays.toString(players.stream().map(Player::getDisplayName).toArray());
+        playerString = players.size() + ((players.size() != 1) ? " players: " : " player: ") + playerString.substring(1, playerString.length()-1);
+        Messenger.sendMessage(player,
+                "Game currently running!\n" +
+                "Hosted by " + ScanBlockHunt.runningGame.getGameHost().getDisplayName() + "\n" +
+                playerString + "\n" +
+                "Active Round: " + ScanBlockHunt.roundGoing + "\n" +
+                ((ScanBlockHunt.roundGoing) ? "Current Item: " + ScanBlockHunt.runningGame.getCurrentItem().name() : ""),
+                MessageSeverity.INFO);
     }
 }

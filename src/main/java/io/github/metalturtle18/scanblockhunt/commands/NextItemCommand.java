@@ -17,12 +17,17 @@ public class NextItemCommand implements BlockHuntCommand {
 
     @Override
     public void runCommand(Player player, String[] args) {
-        if (args.length <= 1) {
-            Messenger.sendMessage(player, "You need to specify an actual item for the next round or say \"random\" for a random item!", MessageSeverity.INCORRECT_COMMAND_USAGE);
-            return;
-        }
         if (ScanBlockHunt.runningGame == null) {
             Messenger.sendMessage(player, "You need to start an actual game before you can start a new round!", MessageSeverity.INCORRECT_COMMAND_USAGE);
+            return;
+        } else if (!ScanBlockHunt.runningGame.getGameHost().equals(player)) {
+            Messenger.sendMessage(player, "You must be a host in order to start a new round!", MessageSeverity.INCORRECT_COMMAND_USAGE);
+            return;
+        } else if (args.length <= 1) {
+            Messenger.sendMessage(player, "You need to specify an actual item for the next round or say \"random\" for a random item!", MessageSeverity.INCORRECT_COMMAND_USAGE);
+            return;
+        } else if (ScanBlockHunt.roundGoing) {
+            Messenger.sendMessage(player, "You need to end the current round in order to start a new one! (use /sbh endround)", MessageSeverity.INCORRECT_COMMAND_USAGE);
             return;
         }
         if (ScanBlockHunt.runningGame.getGameHost().equals(player)) {

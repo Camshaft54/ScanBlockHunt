@@ -14,7 +14,6 @@ public class ItemPickupEvent implements Listener {
         Player player = (Player) event.getEntity();
         if (event.getItem().getItemStack().getType().equals(ScanBlockHunt.runningGame.getCurrentItem()) && ScanBlockHunt.roundGoing) {
             ScanBlockHunt.runningGame.itemFound(player);
-            player.sendMessage("found the item"); // TODO: testing
         }
     }
 }
