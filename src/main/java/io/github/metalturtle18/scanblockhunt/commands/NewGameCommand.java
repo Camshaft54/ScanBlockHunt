@@ -15,7 +15,7 @@ public class NewGameCommand implements BlockHuntCommand {
 
     @Override
     public void runCommand(Player player, String[] args) {
-        if (ScanBlockHunt.runningGame != null) { // There is already a game running
+        if (ScanBlockHunt.runningGame != null) {
             Messenger.sendMessage(player, "There is already a game running so you cannot start a new one!", MessageSeverity.INCORRECT_COMMAND_USAGE);
         } else {
             ScanBlockHunt.runningGame = new Game(player);

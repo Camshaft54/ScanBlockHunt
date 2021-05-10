@@ -6,22 +6,23 @@ import io.github.metalturtle18.scanblockhunt.util.Messenger;
 import io.github.metalturtle18.scanblockhunt.util.enums.MessageSeverity;
 import org.bukkit.entity.Player;
 
-public class EndRoundCommand implements BlockHuntCommand {
+public class ResetCommand implements BlockHuntCommand {
+
     @Override
     public String getCommandName() {
-        return "endround";
+        return "reset";
     }
 
     @Override
     public void runCommand(Player player, String[] args) {
-        if (!ScanBlockHunt.roundGoing) {
-            Messenger.sendMessage(player, "There must be a round going in order to skip it!", MessageSeverity.INCORRECT_COMMAND_USAGE);
+        if (ScanBlockHunt.runningGame == null) {
+            Messenger.sendMessage(player, "A game must be running in order to reset it!", MessageSeverity.INCORRECT_COMMAND_USAGE);
             return;
         } else if (!ScanBlockHunt.runningGame.hasPermissions(player)) {
-            Messenger.sendMessage(player, "You must be the game's host in order to skip the current round!", MessageSeverity.INCORRECT_COMMAND_USAGE);
+            Messenger.sendMessage(player, "You must be a server admin or host of the game to run this command!", MessageSeverity.INCORRECT_COMMAND_USAGE);
             return;
         }
-        ScanBlockHunt.runningGame.endRound();
-        Messenger.sendMessage(player,"Skipped the current round!", MessageSeverity.INFO);
+        ScanBlockHunt.runningGame.reset();
+        Messenger.sendMessage(player, "Reset all scores and cleared current round!", MessageSeverity.INFO);
     }
 }

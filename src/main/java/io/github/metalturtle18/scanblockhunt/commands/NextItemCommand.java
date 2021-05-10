@@ -3,6 +3,7 @@ package io.github.metalturtle18.scanblockhunt.commands;
 import io.github.metalturtle18.scanblockhunt.ScanBlockHunt;
 import io.github.metalturtle18.scanblockhunt.util.BlockHuntCommand;
 import io.github.metalturtle18.scanblockhunt.util.Messenger;
+import io.github.metalturtle18.scanblockhunt.util.MiscUtils;
 import io.github.metalturtle18.scanblockhunt.util.enums.MessageSeverity;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,8 +21,8 @@ public class NextItemCommand implements BlockHuntCommand {
         if (ScanBlockHunt.runningGame == null) {
             Messenger.sendMessage(player, "You need to start an actual game before you can start a new round!", MessageSeverity.INCORRECT_COMMAND_USAGE);
             return;
-        } else if (!ScanBlockHunt.runningGame.getGameHost().equals(player)) {
-            Messenger.sendMessage(player, "You must be a host in order to start a new round!", MessageSeverity.INCORRECT_COMMAND_USAGE);
+        } else if (!ScanBlockHunt.runningGame.hasPermissions(player)) {
+            Messenger.sendMessage(player, "You must be a host or admin to start a new round!", MessageSeverity.INCORRECT_COMMAND_USAGE);
             return;
         } else if (args.length <= 1) {
             Messenger.sendMessage(player, "You need to specify an actual item for the next round or say \"random\" for a random item!", MessageSeverity.INCORRECT_COMMAND_USAGE);
@@ -41,7 +42,7 @@ public class NextItemCommand implements BlockHuntCommand {
                 if (item == null) {
                     Messenger.sendMessage(player, "That is not a valid item!", MessageSeverity.INCORRECT_COMMAND_USAGE);
                 } else {
-                    Messenger.sendMessage(player, "Next item is " + item.name() + "!", MessageSeverity.INFO);
+                    Messenger.sendMessage(player, "Next item is " + MiscUtils.getDisplayName(item) + "!", MessageSeverity.INFO);
                     ScanBlockHunt.runningGame.setItem(item);
                 }
             }

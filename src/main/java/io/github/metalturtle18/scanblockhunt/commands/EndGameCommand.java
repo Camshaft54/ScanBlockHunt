@@ -18,8 +18,8 @@ public class EndGameCommand implements BlockHuntCommand {
         if (ScanBlockHunt.runningGame == null) {
             Messenger.sendMessage(player, "A game must be running in order to stop it!", MessageSeverity.INCORRECT_COMMAND_USAGE);
             return;
-        } else if (!ScanBlockHunt.runningGame.getGameHost().equals(player)) {
-            Messenger.sendMessage(player, "You can only end the game if you are the host!", MessageSeverity.INCORRECT_COMMAND_USAGE);
+        } else if (!ScanBlockHunt.runningGame.hasPermissions(player)) {
+            Messenger.sendMessage(player, "You can only end the game if you are the host or an admin!", MessageSeverity.INCORRECT_COMMAND_USAGE);
             return;
         }
         ConversationFactory factory = new ConversationFactory(ScanBlockHunt.getPlugin())

@@ -18,8 +18,8 @@ public class AddPlayerCommand implements BlockHuntCommand {
         if (ScanBlockHunt.runningGame == null) {
             Messenger.sendMessage(player, "A game must be running in order to add players to it!", MessageSeverity.INCORRECT_COMMAND_USAGE);
             return;
-        } else if (!ScanBlockHunt.runningGame.getGameHost().equals(player)) {
-            Messenger.sendMessage(player, "You can only add players if you are the host of the game!", MessageSeverity.INCORRECT_COMMAND_USAGE);
+        } else if (!ScanBlockHunt.runningGame.hasPermissions(player)) {
+            Messenger.sendMessage(player, "You can only add players if you are the host of the game or an admin!", MessageSeverity.INCORRECT_COMMAND_USAGE);
             return;
         } else if (args.length != 2) {
             Messenger.sendMessage(player, "You must specify a valid player!", MessageSeverity.INCORRECT_COMMAND_USAGE);

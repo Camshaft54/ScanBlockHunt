@@ -80,20 +80,24 @@ public class Game {
     /**
      * Resets the scores for all players in the game.
      */
-    public void resetScores() {
-        for (Player p : players.keySet()) {
-            players.get(p).setScore(0);
-        }
+    public void reset() {
+        players.forEach((p, s) -> s.setScore(0));
+        ScanBlockHunt.roundGoing = false;
+        scoreboard.resetScores(roundTimeText.getDisplayName());
+        roundTime = 0;
+        roundTimeText.setDisplayName("0 seconds");
+        itemObj.getScore(roundTimeText.getDisplayName()).setScore(999);
+        itemObj.setDisplayName(ChatColor.GOLD + "N/A " + ChatColor.AQUA + "Round 0");
     }
 
     /**
-     * Increases the score of a player by a specified amount.
+     * Sets the score of a player by a specified amount.
      * @param player the player to have their score modified
-     * @param amount the number of points to add or, if negative, subtract from the player
+     * @param amount the score to set
      */
-    public void increaseScore(Player player, int amount) {
+    public void setScore(Player player, int amount) {
         if (players.containsKey(player)) {
-            players.get(player).setScore(players.get(player).getScore() + amount);
+            players.get(player).setScore(amount);
         }
     }
 
@@ -106,9 +110,8 @@ public class Game {
         ScanBlockHunt.roundGoing = true;
         roundNumber++;
         roundTime = 0;
-        itemObj.setDisplayName(ChatColor.GOLD + currentItem.name() + ChatColor.AQUA + " Round " + roundNumber);
-        Messenger.sendTitle("Next item: " + currentItem.name(), "Round " + roundNumber);
-        roundTime = 0;
+        itemObj.setDisplayName(ChatColor.GOLD + MiscUtils.getDisplayName(currentItem) + ChatColor.AQUA + " Round " + roundNumber);
+        Messenger.sendTitle(MiscUtils.getDisplayName(currentItem), "Round " + roundNumber);
     }
 
     /**
@@ -127,7 +130,7 @@ public class Game {
     public void endRound() {
         ScanBlockHunt.roundGoing = false;
         roundTime = 0;
-        Messenger.sendTitle("Round skipped!", "No one found " + currentItem);
+        Messenger.sendTitle("Round skipped!", ChatColor.RED + "" + ChatColor.STRIKETHROUGH + MiscUtils.getDisplayName(currentItem));
     }
 
     /**
@@ -161,5 +164,14 @@ public class Game {
             }
             itemObj.getScore(roundTimeText.getDisplayName()).setScore(999);
         }
+    }
+
+    /**
+     * Checks if the player specified has sufficient permissions to modify the game.
+     * @param player the player to check permissions for
+     * @return true if the player has permissions, false if they don't
+     */
+    public boolean hasPermissions(Player player) {
+        return player.isOp() || player.equals(gameHost);
     }
 }
