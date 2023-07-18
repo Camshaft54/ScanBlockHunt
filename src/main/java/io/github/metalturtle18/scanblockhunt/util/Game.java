@@ -5,9 +5,13 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -112,6 +116,35 @@ public class Game {
         roundTime = 0;
         itemObj.setDisplayName(ChatColor.GOLD + MiscUtils.getDisplayName(currentItem) + ChatColor.AQUA + " Round " + roundNumber);
         Messenger.sendTitle(MiscUtils.getDisplayName(currentItem), "Round " + roundNumber);
+
+        // Check that no players already have the item and if they do, end the round.
+        ArrayList<Player> playersWithItem = new ArrayList<>();
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            for (ItemStack itemStack : p.getInventory()) {
+                if (itemStack != null && itemStack.getType().equals(item)) {
+                    playersWithItem.add(p);
+                    break;
+                }
+            }
+        }
+        if (playersWithItem.size() > 0) {
+            ScanBlockHunt.roundGoing = false;
+            if (playersWithItem.size() == 1) {
+                Messenger.sendTitle(ChatColor.RED + playersWithItem.get(0).getDisplayName() + " found " + currentItem + "!", "");
+            } else {
+                String playerString = Arrays.toString(playersWithItem.stream().map(Player::getDisplayName).toArray());
+                playerString = playerString.substring(1, playerString.length() - 1);
+                Messenger.sendTitle("Multiple players found " + currentItem + "!", playerString + " all found the item!");
+            }
+            playersWithItem.forEach(p -> players.get(p).setScore(players.get(p).getScore() + 1));
+            scoreboard.resetScores(roundTimeText.getDisplayName());
+            roundTime = 0;
+            roundTimeText.setDisplayName("0 seconds");
+            itemObj.getScore(roundTimeText.getDisplayName()).setScore(999);
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0F, 1.0F);
+            }
+        }
     }
 
     /**
@@ -122,6 +155,10 @@ public class Game {
         ScanBlockHunt.roundGoing = false;
         Messenger.sendTitle(ChatColor.RED + foundByPlayer.getDisplayName() + " found " + currentItem + "!", "");
         players.get(foundByPlayer).setScore(players.get(foundByPlayer).getScore() + 1);
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0F, 1.0F);
+        }
     }
 
     /**

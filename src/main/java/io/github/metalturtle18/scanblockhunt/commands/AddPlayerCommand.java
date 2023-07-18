@@ -31,7 +31,7 @@ public class AddPlayerCommand implements BlockHuntCommand {
             if (ScanBlockHunt.runningGame.getPlayers().containsKey(playerToAdd)) {
                 Messenger.sendMessage(player, "Player specified is already in the game!", MessageSeverity.INCORRECT_COMMAND_USAGE);
             } else {
-                ScanBlockHunt.runningGame.addPlayer(player);
+                ScanBlockHunt.runningGame.addPlayer(playerToAdd);
                 Messenger.sendMessage(player, "Successfully added " + playerToAdd.getDisplayName() + " to the game!", MessageSeverity.INFO);
             }
         } else {

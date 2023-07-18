@@ -67,11 +67,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
             String[][] cmdArgs = CommandTabCompletion.get(args[0]).getArgs();
             if (cmdArgs.length > args.length - 2) {
                 if (cmdArgs[args.length-2].length > 0 && cmdArgs[args.length-2][0].equals("*player*")) {
-                    completions.addAll(getPlayerList(args[args.length-2]));
+                    completions.addAll(getPlayerList(args[args.length-1]));
                 } else if (cmdArgs[args.length-2].length > 0 && cmdArgs[args.length-2][0].equals("*material*")) {
-                    completions.addAll(getMaterialList(args[args.length-2]));
+                    completions.addAll(getMaterialList(args[args.length-1]));
                 } else {
-                    completions.addAll(Arrays.asList(cmdArgs[args.length - 2]));
+                    completions.addAll(Arrays.asList(cmdArgs[args.length - 1]));
                 }
             }
         }
@@ -82,7 +82,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
     }
 
     public ArrayList<String> getMaterialList(String argument) {
-        System.out.println("test");
         ArrayList<String> out = new ArrayList<>();
         List<Material> materialList = Arrays.asList(Material.values());
         ArrayList<String> materials = new ArrayList<>();
